@@ -13,7 +13,7 @@ OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 
 openai.api_key = OPENAI_API_KEY
 
-logging.basicConfig(level=logging.DEBUG,
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -54,7 +54,6 @@ def webhook():
     return jsonify(success=False, message='Invalid JSON payload'), 400
 
   data = request.json
-
   logging.debug(f"Received webhook data: {data}")
 
   username = data['user']
@@ -69,7 +68,7 @@ def webhook():
   message = f"📺 {username} just watched episode {episode_num} - {episode_title} of {show_title}!\n\n{generated_text}"
 
   logging.debug(f"Message: {message}")
-  # send_discord_message(message)
+  send_discord_message(message)
 
   return jsonify(success=True)
 
