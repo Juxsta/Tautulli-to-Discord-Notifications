@@ -61,12 +61,14 @@ def webhook():
   show_name = data['show_name']
   season_num = data['season_num']
   episode_num = data['episode_num']
-  prompt = f"{episode_name} of {show_name}. You are an important character from this episode. Express the general sentiment of this episode through recognizable dialogue. Only respond in first person dialogue from that character. Don't say who you are. Say something to get people excited for the next episode, include a small detail about it. Be very brief"
-  generated_text = get_openai_generated_text(prompt)
-
-  logging.debug(f"Generated text: {generated_text}")
-
-  message = f"📺 {username} just watched season {season_num} episode {episode_num} of {show_name} - {episode_name} !\n\n{generated_text}"
+  
+  teaser_prompt = f"{episode_name} of {show_name}. You are an important character from this episode. Express the general sentiment of this episode through recognizable dialogue. Only respond in first person dialogue from that character. Don't say who you are. Say something to get people excited for the next episode, include a small detail about it. Be very brief"
+  teaser_generated_text = get_openai_generated_text(prompt)
+  
+  watched_message = f"{username} just watched season {season_num} episode {episode_num} of {show_name} - {episode_name}"
+  watched_prompt = f"Stylize the following dialogue with a bunch of emojis that match the context of the content that was watched. Give the text a lot of flare: {watched_message}"
+  watched_generated_text = get_openai_generated_text(watched_prompt)
+  message = f"{watched_generated_text}\n\n{generated_text}"
 
   logging.debug(f"Message: {message}")
   send_discord_message(message)
